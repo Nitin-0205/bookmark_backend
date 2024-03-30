@@ -35,6 +35,7 @@ app.use(bookmarkrouter);
 
 app.get("/", (req, res) => {
     console.log("ROOT")
+    return res.send({ message: "Welcome to Bookmark API" });
 })
 
 
