@@ -20,6 +20,10 @@ mongoose.connect(process.env.MONGO_URL)
     }
     )
 
+app.get("/", (req, res) => {
+    console.log("ROOT")
+    return res.send({ message: "Welcome to Bookmark API" });
+})
 
 
 require('./models/users');
@@ -33,10 +37,6 @@ app.use(bodyParser.json());
 app.use(authrouter);
 app.use(bookmarkrouter);
 
-app.get("/", (req, res) => {
-    console.log("ROOT")
-    return res.send({ message: "Welcome to Bookmark API" });
-})
 
 
 app.listen(port, () => {
