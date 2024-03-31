@@ -14,13 +14,13 @@ router.post("/signup", (req, res) => {
         password } = req.body;
 
     if (!email || !password) {
-        res.status(422).send({ error: "invalid Credential" })
+        res.status(422).send({ err: "invalid Credential" })
     } else {
-        // res.status(200).send({error:"valid"})
+        // res.status(200).send({err:"valid"})
         User.findOne({ email: email })
             .then(async (savedUser) => {
                 if (savedUser) {
-                    return res.send({ error: "User Already Exist !!!" })
+                    return res.status(400).send({ err: "User Already Exist !!!" })
                 }
                 var user = new User({
                     email,
@@ -31,10 +31,17 @@ router.post("/signup", (req, res) => {
                     await user.save();
                     console.log("after save")
                     const token = jwt.sign({ _id: user._id }, process.env.JWT_secret_key);
-                    res.send(token);
+                    res.send({
+                        message: "SUCCESS",
+                        username: user.username,
+                        email: user.email,
+                        id: user._id,
+                        token: token
+
+                    });
                 } catch (err) {
                     console.log(err);
-                    res.send({ error: "failed to save :" });
+                    res.send({ err: "failed to save :" });
                 }
 
             })
@@ -54,7 +61,7 @@ router.post("/login", (req, res) => {
     User.findOne({ email: email })
         .then((savedUser) => {
             if (!savedUser) {
-                return res.status(201).send({ err: "User Not Found !!!" })
+                return res.status(400).send({ err: "User Not Found !!!" })
             }
             try {
                 if (password === savedUser.password) {
@@ -71,7 +78,7 @@ router.post("/login", (req, res) => {
 
                 } else {
                     console.log("Password Doesn't Match");
-                    return res.status(201).send({ error: "Invalid Credentials" });
+                    return res.status(201).send({ err: "Invalid Credentials" });
 
                 }
 

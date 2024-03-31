@@ -9,6 +9,20 @@ const authenticateToken = require('../middleware/validtoken')
 router.use(authenticateToken)
 router.use(bodyParser.json());
 
+router.get("/catagory/name", (req, res) => {
+    const { userId } = req.query;
+    bookmark.find({ user: userId })
+        .then((result) => {
+            //find the distinct catagory field from the result not tags
+            const catagory = result.map(item => item.category);
+            let distinctNames = [...new Set(catagory)];
+            return res.send(distinctNames)
+        })
+        .catch((err) => {
+            return res.status(400).send({ error: "failed to fetch" })
+        })
+})
+
 router.get("/bookmark", (req, res) => {
     const { userId } = req.query;
     bookmark.find({ user: userId })
@@ -27,7 +41,8 @@ router.post("/bookmark/save", (req, res) => {
         title: body.title,
         url: body.url,
         tags: body.tags,
-        user: req.user._id
+        user: req.user._id,
+        category: body.category
     })
 
 
@@ -35,7 +50,8 @@ router.post("/bookmark/save", (req, res) => {
         title: body.title,
         url: body.url,
         tags: body.tags,
-        user: req.user._id
+        user: req.user._id,
+        category: body.category
     })
 
     try {
