@@ -11,7 +11,7 @@ router.use(bodyParser.json());
 
 router.get("/catagory/name", (req, res) => {
     const { userId } = req.query;
-    bookmark.find({ user: userId })
+    bookmark.find({ user: new mongoose.Types.ObjectId(userId) })
         .then((result) => {
             //find the distinct catagory field from the result not tags
             const catagory = result.map(item => item.category);
@@ -23,10 +23,12 @@ router.get("/catagory/name", (req, res) => {
         })
 })
 
+
 router.get("/bookmark", (req, res) => {
     const { userId } = req.query;
-    bookmark.find({ user: userId })
+    bookmark.find({ user: new mongoose.Types.ObjectId('66087837757dbba513ad9f24') })
         .then((result) => {
+            console.log(result)
             return res.send(result)
         })
         .catch((err) => {
