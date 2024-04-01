@@ -24,7 +24,7 @@ router.get("/catagory/name", (req, res) => {
 })
 
 
-router.get("/bookmark", (req, res) => {
+router.get("/bookmark/all", (req, res) => {
     const { userId } = req.query;
     bookmark.find({ user: new mongoose.Types.ObjectId('66087837757dbba513ad9f24') })
         .then((result) => {
